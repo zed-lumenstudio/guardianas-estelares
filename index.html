@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crepúsculo Estelar — Arte original de fantasía</title>
+<meta name="description" content="Crepúsculo Estelar: arte original de fantasía protagonizado por cinco guerreras mágicas. Ilustraciones exclusivas, cómics y membresía de fans.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --black: #07050c;
+    --black-2: #0e0a17;
+    --panel: #130f1f;
+    --violet: #7c3aed;
+    --violet-deep: #4c1d95;
+    --gold: #d4af37;
+    --gold-bright: #f5cf5c;
+    --neon: #b06cff;
+    --text: #ece7f6;
+    --text-dim: #a99fc0;
+    --line: rgba(212,175,55,0.18);
+    --radius: 18px;
+    --maxw: 1180px;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  html { scroll-behavior:smooth; }
+
+  body{
+    background: var(--black);
+    color: var(--text);
+    font-family:'Inter', sans-serif;
+    font-weight:400;
+    line-height:1.6;
+    overflow-x:hidden;
+    position:relative;
+  }
+
+  h1,h2,h3,h4,.brand{ font-family:'Poppins', sans-serif; }
+
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  img{ display:block; max-width:100%; }
+
+  ::selection{ background:var(--violet); color:#fff; }
+
+  /* ---------- fondo de estrellas ---------- */
+  #stars{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(124,58,237,0.10), transparent 55%),
+      radial-gradient(ellipse at 80% 70%, rgba(212,175,55,0.07), transparent 55%);
+  }
+  canvas#starfield{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+
+  .container{ max-width:var(--maxw); margin:0 auto; padding:0 24px; position:relative; z-index:2; }
+
+  /* ---------- header / nav ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    backdrop-filter: blur(10px);
+    background: rgba(7,5,12,0.55);
+    border-bottom:1px solid var(--line);
+    transition: background .3s ease;
+  }
+  nav{
+    max-width:var(--maxw); margin:0 auto; padding:16px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{
+    font-weight:800; font-size:1.15rem; letter-spacing:.04em;
+    background: linear-gradient(120deg, var(--gold-bright), var(--neon));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .nav-links{ display:flex; gap:32px; }
+  .nav-links a{
+    font-size:.86rem; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--text-dim); transition: color .25s ease;
+    position:relative;
+  }
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:-6px; width:0; height:1px;
+    background: var(--gold-bright); transition: width .25s ease;
+  }
+  .nav-links a:hover{ color:var(--text); }
+  .nav-links a:hover::after{ width:100%; }
+
+  .burger{ display:none; flex-direction:column; gap:5px; cursor:pointer; background:none; border:none; z-index:110; }
+  .burger span{ width:24px; height:2px; background:var(--gold-bright); transition:.3s; }
+  .burger.open span:nth-child(1){ transform: translateY(7px) rotate(45deg); }
+  .burger.open span:nth-child(2){ opacity:0; }
+  .burger.open span:nth-child(3){ transform: translateY(-7px) rotate(-45deg); }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    text-align:center; overflow:hidden;
+  }
+  .hero-bg{
+    position:absolute; inset:0; z-index:0;
+    background-image:
+      linear-gradient(180deg, rgba(7,5,12,0.35) 0%, rgba(7,5,12,0.55) 55%, var(--black) 100%),
+      url('images/grupo_batalla.jpg');
+    background-size:cover; background-position:center 25%;
+    filter: saturate(1.05);
+    animation: heroZoom 20s ease-in-out infinite alternate;
+  }
+  @keyframes heroZoom{ from{ transform:scale(1);} to{ transform:scale(1.08);} }
+
+  .hero-content{ position:relative; z-index:2; padding:0 20px; }
+  .eyebrow{
+    display:inline-block; padding:8px 18px; border:1px solid var(--line); border-radius:999px;
+    font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--gold-bright);
+    margin-bottom:26px; backdrop-filter: blur(6px); background: rgba(19,15,31,0.4);
+  }
+  .hero h1{
+    font-size: clamp(2.8rem, 7vw, 6rem); font-weight:800; letter-spacing:.01em;
+    background: linear-gradient(100deg, #fff 10%, var(--gold-bright) 45%, var(--neon) 75%, var(--violet) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    text-shadow: 0 0 60px rgba(124,58,237,0.35);
+    line-height:1.05;
+  }
+  .hero p.subtitle{
+    margin-top:22px; font-size: clamp(1rem, 2vw, 1.3rem); color:var(--text-dim);
+    font-weight:300; letter-spacing:.03em;
+  }
+  .hero-actions{ margin-top:44px; display:flex; gap:20px; justify-content:center; flex-wrap:wrap; }
+
+  .btn{
+    display:inline-block; padding:15px 38px; border-radius:999px; font-family:'Poppins',sans-serif;
+    font-weight:600; font-size:.92rem; letter-spacing:.03em; cursor:pointer; border:none;
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .btn-primary{
+    background: linear-gradient(120deg, var(--violet), var(--violet-deep));
+    color:#fff; box-shadow: 0 0 22px rgba(124,58,237,0.45), inset 0 0 0 1px rgba(255,255,255,0.08);
+  }
+  .btn-primary:hover{ transform:translateY(-3px); box-shadow: 0 0 40px rgba(176,108,255,0.75); }
+  .btn-gold{
+    background: linear-gradient(120deg, var(--gold), var(--gold-bright));
+    color:#1a1305; box-shadow: 0 0 22px rgba(212,175,55,0.4);
+  }
+  .btn-gold:hover{ transform:translateY(-3px); box-shadow: 0 0 40px rgba(245,207,92,0.8); }
+  .btn-outline{
+    background:transparent; color:var(--text); border:1px solid var(--line);
+  }
+  .btn-outline:hover{ border-color: var(--gold-bright); color:var(--gold-bright); box-shadow:0 0 18px rgba(212,175,55,0.25); }
+
+  .scroll-cue{
+    position:absolute; bottom:34px; left:50%; transform:translateX(-50%); z-index:2;
+    width:22px; height:36px; border:1px solid var(--line); border-radius:14px;
+  }
+  .scroll-cue::before{
+    content:''; position:absolute; top:6px; left:50%; width:3px; height:8px; border-radius:2px;
+    background: var(--gold-bright); transform:translateX(-50%);
+    animation: scrollDown 1.8s ease-in-out infinite;
+  }
+  @keyframes scrollDown{ 0%{ opacity:1; top:6px;} 70%{ opacity:0; top:18px;} 100%{opacity:0; top:6px;} }
+
+  /* ---------- secciones genéricas ---------- */
+  section{ position:relative; z-index:2; padding:120px 0; }
+  .section-head{ text-align:center; max-width:640px; margin:0 auto 64px; }
+  .section-head .tag{
+    font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--neon);
+    margin-bottom:14px; display:block;
+  }
+  .section-head h2{
+    font-size: clamp(2rem, 4vw, 2.8rem); font-weight:700; color:#fff;
+  }
+  .section-head p{ margin-top:16px; color:var(--text-dim); font-size:1.02rem; }
+
+  .reveal{ opacity:0; transform: translateY(36px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.is-visible{ opacity:1; transform:none; }
+
+  /* ---------- galería personajes ---------- */
+  .roster{ background: linear-gradient(180deg, transparent, rgba(19,15,31,0.5), transparent); }
+  .cards{
+    display:grid; grid-template-columns:repeat(5, 1fr); gap:22px;
+  }
+  .card{
+    position:relative; border-radius: var(--radius); overflow:hidden; cursor:pointer;
+    background: var(--panel); border:1px solid var(--line);
+    aspect-ratio: 3/4.3;
+    transition: transform .4s ease, box-shadow .4s ease;
+  }
+  .card img{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition: transform .6s ease, filter .5s ease; }
+  .card .shade{
+    position:absolute; inset:0;
+    background: linear-gradient(180deg, transparent 30%, rgba(7,5,12,0.55) 65%, rgba(7,5,12,0.96) 100%);
+  }
+  .card .glow-ring{
+    position:absolute; inset:0; border-radius:var(--radius); pointer-events:none;
+    box-shadow: inset 0 0 0 1px var(--line);
+    transition: box-shadow .4s ease;
+  }
+  .card:hover{ transform:translateY(-10px); }
+  .card:hover img{ transform:scale(1.08); filter:brightness(1.05) saturate(1.15); }
+  .card:hover .glow-ring{ box-shadow: inset 0 0 0 1px var(--card-accent, var(--gold-bright)), 0 0 34px -4px var(--card-accent, var(--gold-bright)); }
+
+  .card-info{ position:absolute; left:0; right:0; bottom:0; padding:22px 18px; z-index:2; }
+  .card-info .power-tag{
+    font-size:.66rem; letter-spacing:.16em; text-transform:uppercase; color: var(--card-accent, var(--gold-bright));
+    margin-bottom:6px; display:block;
+  }
+  .card-info h3{ font-size:1.28rem; font-weight:700; color:#fff; margin-bottom:8px; }
+  .card-info p{ font-size:.83rem; color:var(--text-dim); margin-bottom:14px; display:-webkit-box; -webkit-line-clamp:3; line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+  .card-info .mini-btn{
+    font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600;
+    color:#fff; display:inline-flex; align-items:center; gap:6px;
+    padding:8px 16px; border-radius:999px; border:1px solid var(--card-accent, var(--gold-bright));
+    transition: background .25s ease, color .25s ease;
+  }
+  .card-info .mini-btn:hover{ background: var(--card-accent, var(--gold-bright)); color:#0e0a17; }
+
+  /* imagen grupal fiesta */
+  .roster-banner{
+    margin-top:60px; border-radius: var(--radius); overflow:hidden; position:relative;
+    border:1px solid var(--line);
+  }
+  .roster-banner img{ width:100%; height:420px; object-fit:cover; filter:saturate(1.05); }
+  .roster-banner .banner-caption{
+    position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:40px;
+    background: linear-gradient(0deg, rgba(7,5,12,0.9), transparent 55%);
+  }
+  .roster-banner .banner-caption h4{ font-family:'Poppins',sans-serif; font-size:1.5rem; color:#fff; }
+  .roster-banner .banner-caption span{ color:var(--text-dim); font-size:.9rem; }
+
+  /* ---------- modal ---------- */
+  .modal-overlay{
+    position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center;
+    background: rgba(4,3,8,0.85); backdrop-filter: blur(6px); padding:20px;
+  }
+  .modal-overlay.active{ display:flex; }
+  .modal{
+    background: var(--panel); border:1px solid var(--line); border-radius:22px;
+    max-width:820px; width:100%; max-height:88vh; overflow:auto;
+    display:grid; grid-template-columns: 1fr 1fr;
+    box-shadow: 0 0 60px rgba(124,58,237,0.35);
+    animation: modalPop .35s cubic-bezier(.2,.8,.3,1.2);
+  }
+  @keyframes modalPop{ from{ opacity:0; transform:scale(.92);} to{ opacity:1; transform:scale(1);} }
+  .modal-img{ position:relative; min-height:320px; }
+  .modal-img img{ width:100%; height:100%; object-fit:cover; }
+  .modal-body{ padding:34px 32px; display:flex; flex-direction:column; }
+  .modal-body .power-tag{ font-size:.7rem; letter-spacing:.18em; text-transform:uppercase; color:var(--neon); margin-bottom:10px; }
+  .modal-body h3{ font-size:1.7rem; margin-bottom:16px; color:#fff; }
+  .modal-body p{ color:var(--text-dim); font-size:.95rem; margin-bottom:28px; }
+  .modal-body .btn{ align-self:flex-start; }
+  .modal-close{
+    position:absolute; top:16px; right:16px; z-index:5; width:38px; height:38px; border-radius:50%;
+    background: rgba(7,5,12,0.7); border:1px solid var(--line); color:#fff; font-size:1.1rem;
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .modal-close:hover{ border-color: var(--gold-bright); color:var(--gold-bright); }
+
+  /* ---------- membresía ---------- */
+  .membership{
+    background: radial-gradient(ellipse at 50% 0%, rgba(124,58,237,0.12), transparent 60%);
+  }
+  .plans{ display:grid; grid-template-columns: 1.2fr 1fr; gap:28px; align-items:stretch; }
+  .plan-card{
+    border-radius:var(--radius); padding:40px; border:1px solid var(--line);
+    background: linear-gradient(160deg, rgba(124,58,237,0.10), rgba(19,15,31,0.9));
+    position:relative; overflow:hidden;
+  }
+  .plan-card.featured{
+    border-color: var(--gold);
+    box-shadow: 0 0 50px -10px rgba(212,175,55,0.35);
+  }
+  .plan-card.featured::before{
+    content:'MÁS ELEGIDO'; position:absolute; top:18px; right:-38px; transform:rotate(45deg);
+    background: var(--gold-bright); color:#1a1305; font-size:.65rem; font-weight:700;
+    letter-spacing:.1em; padding:5px 44px;
+  }
+  .plan-card h3{ font-size:1.4rem; color:#fff; margin-bottom:6px; }
+  .plan-price{ font-family:'Poppins',sans-serif; font-size:2.6rem; font-weight:800; color:var(--gold-bright); margin:14px 0 6px; }
+  .plan-price span{ font-size:1rem; color:var(--text-dim); font-weight:400; }
+  .plan-card ul{ margin:26px 0 32px; }
+  .plan-card li{
+    padding:10px 0; border-bottom:1px dashed var(--line); color:var(--text-dim); font-size:.92rem;
+    display:flex; align-items:center; gap:10px;
+  }
+  .plan-card li::before{ content:'✦'; color:var(--neon); font-size:.8rem; }
+  .plan-card li:last-child{ border-bottom:none; }
+
+  .packs-note{
+    margin-top:36px; text-align:center; color:var(--text-dim); font-size:.92rem;
+    padding-top:28px; border-top:1px solid var(--line);
+  }
+  .packs-note strong{ color:var(--gold-bright); }
+
+  /* ---------- sobre el artista ---------- */
+  .about{
+    display:grid; grid-template-columns: 0.9fr 1.4fr; gap:60px; align-items:center;
+  }
+  .about-portrait{
+    aspect-ratio: 1/1; border-radius:50%; overflow:hidden; border:2px solid var(--line);
+    position:relative; box-shadow: 0 0 50px rgba(124,58,237,0.25);
+  }
+  .about-portrait img{ width:100%; height:100%; object-fit:cover; }
+  .about-text .tag{ font-size:.72rem; letter-spacing:.22em; text-transform:uppercase; color:var(--neon); margin-bottom:14px; display:block; }
+  .about-text h2{ font-size:clamp(1.8rem,3.4vw,2.4rem); color:#fff; margin-bottom:20px; }
+  .about-text p{ color:var(--text-dim); font-size:1.02rem; margin-bottom:16px; }
+  .about-text .signature{ margin-top:22px; font-family:'Poppins',sans-serif; color:var(--gold-bright); font-size:1.15rem; }
+
+  /* ---------- footer ---------- */
+  footer{
+    border-top:1px solid var(--line); padding:56px 0 32px; position:relative; z-index:2;
+  }
+  .footer-top{ display:flex; justify-content:space-between; flex-wrap:wrap; gap:30px; margin-bottom:36px; }
+  .footer-brand .brand{ font-size:1.3rem; }
+  .footer-brand p{ margin-top:10px; color:var(--text-dim); font-size:.88rem; max-width:320px; }
+  .footer-links{ display:flex; gap:48px; flex-wrap:wrap; }
+  .footer-links h5{ font-size:.75rem; letter-spacing:.14em; text-transform:uppercase; color:var(--gold-bright); margin-bottom:14px; }
+  .footer-links a, .footer-links span{ display:block; color:var(--text-dim); font-size:.9rem; margin-bottom:9px; }
+  .footer-links a:hover{ color:var(--neon); }
+  .age-notice{
+    text-align:center; font-size:.78rem; color:var(--text-dim); letter-spacing:.04em;
+    padding-top:26px; border-top:1px solid var(--line);
+  }
+  .age-notice strong{ color:var(--gold-bright); }
+
+  /* ---------- responsive ---------- */
+  @media (max-width: 980px){
+    .cards{ grid-template-columns:repeat(2, 1fr); }
+    .plans{ grid-template-columns:1fr; }
+    .about{ grid-template-columns:1fr; text-align:center; }
+    .about-portrait{ width:200px; margin:0 auto; }
+    .modal{ grid-template-columns:1fr; }
+    .modal-img{ min-height:240px; }
+  }
+  @media (max-width: 640px){
+    .nav-links{
+      position:fixed; top:0; right:0; height:100vh; width:72%; max-width:300px;
+      background: var(--black-2); flex-direction:column; padding:100px 32px; gap:26px;
+      transform:translateX(100%); transition: transform .35s ease; border-left:1px solid var(--line);
+    }
+    .nav-links.open{ transform:translateX(0); }
+    .burger{ display:flex; }
+    .cards{ grid-template-columns:1fr 1fr; gap:14px; }
+    section{ padding:80px 0; }
+    .roster-banner img{ height:260px; }
+    .footer-top{ flex-direction:column; }
+  }
+  @media (max-width: 420px){
+    .cards{ grid-template-columns:1fr; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+<div id="stars"></div>
+
+<header>
+  <nav>
+    <a href="#top" class="brand">Crepúsculo Estelar</a>
+    <button class="burger" id="burger" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#galeria">Guerreras</a></li>
+      <li><a href="#membresia">Membresía</a></li>
+      <li><a href="#artista">Artista</a></li>
+      <li><a href="#contacto">Contacto</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <span class="eyebrow">Universo original · Guerreras mágicas</span>
+    <h1>Crepúsculo Estelar</h1>
+    <p class="subtitle">Arte original de fantasía para adultos</p>
+    <div class="hero-actions">
+      <a href="#galeria" class="btn btn-primary">Explorar</a>
+      <a href="#membresia" class="btn btn-outline">Ver membresía</a>
+    </div>
+  </div>
+  <div class="scroll-cue"></div>
+</section>
+
+<!-- GALERÍA -->
+<section class="roster" id="galeria">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">El equipo</span>
+      <h2>Cinco guardianas, un mismo cielo</h2>
+      <p>Cada guerrera domina un fragmento del cosmos. Conocé su historia y descubrí el arte exclusivo dedicado a cada una.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card reveal" style="--card-accent:#c9a6ff" data-name="Nova Vespera" data-power="Gravedad y secretos"
+           data-desc="Líder misteriosa. Cabello negro con mechón plateado. Domina la gravedad y los secretos del universo."
+           data-img="images/nova.jpg">
+        <img src="images/nova.jpg" alt="Retrato de Nova Vespera" onerror="this.src='https://placehold.co/600x860/130f1f/d4af37?text=Nova+Vespera'">
+        <div class="shade"></div><div class="glow-ring"></div>
+        <div class="card-info">
+          <span class="power-tag">Gravedad · Secretos</span>
+          <h3>Nova Vespera</h3>
+          <p>Líder misteriosa. Cabello negro con mechón plateado. Domina la gravedad y los secretos del universo.</p>
+          <span class="mini-btn">Ver más →</span>
+        </div>
+      </div>
+
+      <div class="card reveal" style="--card-accent:#f5cf5c" data-name="Lumen Solaris" data-power="Energía solar"
+           data-desc="Energía radiante. Coleta rubia miel. Su poder solar ciega enemigos e inspira a sus aliadas."
+           data-img="images/lumen.jpg">
+        <img src="images/lumen.jpg" alt="Retrato de Lumen Solaris" onerror="this.src='https://placehold.co/600x860/130f1f/d4af37?text=Lumen+Solaris'">
+        <div class="shade"></div><div class="glow-ring"></div>
+        <div class="card-info">
+          <span class="power-tag">Luz · Energía solar</span>
+          <h3>Lumen Solaris</h3>
+          <p>Energía radiante. Coleta rubia miel. Su poder solar ciega enemigos e inspira a sus aliadas.</p>
+          <span class="mini-btn">Ver más →</span>
+        </div>
+      </div>
+
+      <div class="card reveal" style="--card-accent:#ff9fc7" data-name="Bruma Escarlata" data-power="Pincel mágico"
+           data-desc="Artista melancólica. Melena rosa grisácea. Pinta realidades con su pincel mágico."
+           data-img="images/bruma.jpg">
+        <img src="images/bruma.jpg" alt="Retrato de Bruma Escarlata" onerror="this.src='https://placehold.co/600x860/130f1f/d4af37?text=Bruma+Escarlata'">
+        <div class="shade"></div><div class="glow-ring"></div>
+        <div class="card-info">
+          <span class="power-tag">Ilusión · Pintura</span>
+          <h3>Bruma Escarlata</h3>
+          <p>Artista melancólica. Melena rosa grisácea. Pinta realidades con su pincel mágico.</p>
+          <span class="mini-btn">Ver más →</span>
+        </div>
+      </div>
+
+      <div class="card reveal" style="--card-accent:#6cd4ff" data-name="Zafir Abisal" data-power="Electricidad"
+           data-desc="Hacker de élite. Cabello azul neón. Controla la electricidad desde las sombras digitales."
+           data-img="images/zafir.jpg">
+        <img src="images/zafir.jpg" alt="Retrato de Zafir Abisal" onerror="this.src='https://placehold.co/600x860/130f1f/d4af37?text=Zafir+Abisal'">
+        <div class="shade"></div><div class="glow-ring"></div>
+        <div class="card-info">
+          <span class="power-tag">Electricidad · Código</span>
+          <h3>Zafir Abisal</h3>
+          <p>Hacker de élite. Cabello azul neón. Controla la electricidad desde las sombras digitales.</p>
+          <span class="mini-btn">Ver más →</span>
+        </div>
+      </div>
+
+      <div class="card reveal" style="--card-accent:#9fffb0" data-name="Cora Silvana" data-power="Naturaleza"
+           data-desc="Guardiana natural. Melena rosa oscuro. Enredaderas y flores obedecen su llamado."
+           data-img="images/cora.jpg">
+        <img src="images/cora.jpg" alt="Retrato de Cora Silvana" onerror="this.src='https://placehold.co/600x860/130f1f/d4af37?text=Cora+Silvana'">
+        <div class="shade"></div><div class="glow-ring"></div>
+        <div class="card-info">
+          <span class="power-tag">Naturaleza · Vida</span>
+          <h3>Cora Silvana</h3>
+          <p>Guardiana natural. Melena rosa oscuro. Enredaderas y flores obedecen su llamado.</p>
+          <span class="mini-btn">Ver más →</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="roster-banner reveal">
+      <img src="images/grupo_fiesta.jpg" alt="Las cinco guerreras reunidas" onerror="this.src='https://placehold.co/1200x420/130f1f/7c3aed?text=Crepusculo+Estelar'">
+      <div class="banner-caption">
+        <h4>Fuera de combate, siguen siendo un equipo</h4>
+        <span>Ilustración grupal disponible en la galería de membresía</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBRESÍA -->
+<section class="membership" id="membresia">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="tag">Únete al club</span>
+      <h2>Todo el universo, en un solo lugar</h2>
+      <p>Accedé a ilustraciones exclusivas, procesos creativos y contenido que no se publica en ningún otro sitio.</p>
+    </div>
+
+    <div class="plans">
+      <div class="plan-card featured reveal">
+        <h3>Membresía mensual</h3>
+        <div class="plan-price">$7.99<span> / mes</span></div>
+        <ul>
+          <li>Ilustraciones exclusivas cada mes</li>
+          <li>Versiones alternativas de cada pieza</li>
+          <li>Wallpapers en alta resolución</li>
+          <li>Making of y proceso de creación</li>
+          <li>Bocetos y arte descartado</li>
+          <li>Packs digitales descargables</li>
+          <li>Comisiones personales con descuento</li>
+        </ul>
+        <a href="#" class="btn btn-gold">Suscribirse</a>
+      </div>
+
+      <div class="plan-card reveal">
+        <h3>Packs individuales</h3>
+        <div class="plan-price">Desde $3<span> / pack</span></div>
+        <ul>
+          <li>Set de arte de una guerrera específica</li>
+          <li>Ideal si querés empezar sin suscripción</li>
+          <li>Incluye wallpapers y arte de alta resolución</li>
+          <li>Pago único, acceso permanente</li>
+        </ul>
+        <a href="#" class="btn btn-outline">Ver packs</a>
+      </div>
+    </div>
+
+    <p class="packs-note reveal">¿Ya sos miembro? <strong>Iniciá sesión</strong> para acceder a tu galería personal y al historial de descargas.</p>
+  </div>
+</section>
+
+<!-- SOBRE EL ARTISTA -->
+<section class="about-section" id="artista">
+  <div class="container about">
+    <div class="about-portrait reveal">
+      <img src="images/grupo_batalla.jpg" alt="Arte del universo Crepúsculo Estelar" onerror="this.src='https://placehold.co/500x500/130f1f/d4af37?text=Artista'">
+    </div>
+    <div class="about-text reveal">
+      <span class="tag">Sobre el artista</span>
+      <h2>El creador detrás del cosmos</h2>
+      <p>Soy Aster Nocturno, creador de este universo. Crepúsculo Estelar nació como un homenaje personal a las guerreras mágicas que marcaron mi infancia, reimaginadas con una estética adulta, oscura y detallada.</p>
+      <p>Cada personaje tiene su propia mitología, su propio color de magia y su propia historia por contar. Este es un proyecto en constante expansión, y cada miembro del club forma parte de esa historia.</p>
+      <p class="signature">Bienvenido al club.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer id="contacto">
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#top" class="brand">Crepúsculo Estelar</a>
+        <p>Arte original de fantasía. Un universo de guerreras mágicas construido ilustración por ilustración.</p>
+      </div>
+      <div class="footer-links">
+        <div>
+          <h5>Navegación</h5>
+          <a href="#galeria">Guerreras</a>
+          <a href="#membresia">Membresía</a>
+          <a href="#artista">Artista</a>
+        </div>
+        <div>
+          <h5>Contacto</h5>
+          <a href="https://twitter.com/" target="_blank" rel="noopener">Twitter / X</a>
+          <span>hola@crepusculoestelar.art</span>
+        </div>
+      </div>
+    </div>
+    <div class="age-notice">
+      <strong>+18</strong> · Este sitio contiene contenido dirigido a un público adulto. Al continuar confirmás que sos mayor de edad según la legislación de tu país. © 2026 Crepúsculo Estelar. Todos los personajes son ficticios y originales.
+    </div>
+  </div>
+</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-img">
+      <img id="modalImg" src="" alt="">
+    </div>
+    <div class="modal-body">
+      <span class="power-tag" id="modalPower"></span>
+      <h3 id="modalName"></h3>
+      <p id="modalDesc"></p>
+      <a href="#membresia" class="btn btn-primary" id="modalCta">Quiero ver más de ella</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ---------- menú hamburguesa ----------
+  const burger = document.getElementById('burger');
+  const navLinks = document.getElementById('navLinks');
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    navLinks.classList.toggle('open');
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    burger.classList.remove('open');
+    navLinks.classList.remove('open');
+  }));
+
+  // ---------- scroll reveal ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+
+  // ---------- header background on scroll ----------
+  const header = document.querySelector('header');
+  window.addEventListener('scroll', () => {
+    header.style.background = window.scrollY > 40 ? 'rgba(7,5,12,0.85)' : 'rgba(7,5,12,0.55)';
+  });
+
+  // ---------- modal de personajes ----------
+  const overlay = document.getElementById('modalOverlay');
+  const modalImg = document.getElementById('modalImg');
+  const modalName = document.getElementById('modalName');
+  const modalDesc = document.getElementById('modalDesc');
+  const modalPower = document.getElementById('modalPower');
+  const modalClose = document.getElementById('modalClose');
+
+  document.querySelectorAll('.card').forEach(card => {
+    card.addEventListener('click', () => {
+      modalImg.src = card.dataset.img;
+      modalImg.alt = 'Retrato de ' + card.dataset.name;
+      modalName.textContent = card.dataset.name;
+      modalDesc.textContent = card.dataset.desc;
+      modalPower.textContent = card.dataset.power;
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function closeModal(){
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+  modalClose.addEventListener('click', closeModal);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+  // ---------- fondo de estrellas animado ----------
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resizeCanvas(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const count = Math.floor((canvas.width * canvas.height) / 9000);
+    stars = Array.from({ length: count }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.3 + 0.2,
+      speed: Math.random() * 0.15 + 0.02,
+      alpha: Math.random(),
+      delta: (Math.random() * 0.02 + 0.005) * (Math.random() < 0.5 ? 1 : -1)
+    }));
+  }
+
+  function drawStars(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      s.alpha += s.delta;
+      if (s.alpha <= 0.1 || s.alpha >= 1) s.delta *= -1;
+      s.y += s.speed;
+      if (s.y > canvas.height) s.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      const goldish = s.r > 1.1;
+      ctx.fillStyle = goldish
+        ? `rgba(245,207,92,${s.alpha})`
+        : `rgba(236,231,246,${s.alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(drawStars);
+  }
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  resizeCanvas();
+  if (!prefersReducedMotion) requestAnimationFrame(drawStars);
+  window.addEventListener('resize', resizeCanvas);
+</script>
+
+</body>
+</html>
